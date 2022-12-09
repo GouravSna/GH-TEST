@@ -32,4 +32,4 @@ jobs:
           cache: 'gradle'
 
       - name: Android native build
-        run: cd android && chmod +x ./gradlew && ./gradlew build --no-daemon
+        run: ./gradlew build

@@ -12,6 +12,7 @@ concurrency:
 
 jobs:
 
+  TestBuild:
     environment: Build
     runs-on: ubuntu-latest
 

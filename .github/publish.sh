@@ -48,27 +48,27 @@ build() {
 }
 
 release_and_tag() {
-                echo Releasing version $NEW_VERSION of $REPO_NAME to GitHub
-                set +e
-                git add ./$VERSION_FILE
+    echo Releasing version $NEW_VERSION of $REPO_NAME to GitHub
+    set +e
+    git add ./$VERSION_FILE
     git add ./$BUILD_GRADLE
     git commit -m "Update version to $NEW_TAG"
     set -e
     git push origin HEAD:$BRANCH_NAME
 
-    if [[ "$RELEASE_TYPE" == "Patch" || "$RELEASE_TYPE" == "Full" ]]; then
+    if [[ "$RELEASE_TYPE" = "Patch" || "$RELEASE_TYPE" = "Full" ]]; then
 
 cat << EOF > ./post.json
 {
       "name": "$NEW_TAG",
-      "body": "## Changes from [$PREV_TAG](https://github.com/kaltura/$REPO_NAME/releases/tag/$PREV_TAG)\n\nTBD",
+      "body": "## Changes from [$PREV_TAG](https://github.com/GouravSna/$REPO_NAME/releases/tag/$PREV_TAG)\n\nTBD",
       "tag_name": "$NEW_TAG",
       "target_commitish": "$BRANCH_NAME"
 }
 EOF
     fi
 
-    if [ "$RELEASE_TYPE" == "Update" ]; then
+    if [ "$RELEASE_TYPE" = "Update" ]; then
                   JSON_BODY="### Plugin Playkit Support\n\n"
                   JSON_BODY="$JSON_BODY$NEW_TAG\n\n"
       JSON_BODY="$JSON_BODY * upgrade to $NEW_TAG\n\n"
@@ -80,7 +80,7 @@ EOF
 cat << EOF > ./post.json
 {
       "name": "$NEW_TAG",
-      "body": "## Changes from [$PREV_TAG](https://github.com/kaltura/$REPO_NAME/releases/tag/$PREV_TAG)\n\n$JSON_BODY",
+      "body": "## Changes from [$PREV_TAG](https://github.com/GouravSna/$REPO_NAME/releases/tag/$PREV_TAG)\n\n$JSON_BODY",
       "tag_name": "$NEW_TAG",
       "target_commitish": "$BRANCH_NAME"
 }
@@ -88,7 +88,7 @@ EOF
     fi
                 cat post.json
 
-                curl https://api.github.com/repos/kaltura/$REPO_NAME/releases -X POST -u "$GitHubAuth" -H 'Content-Type: application/json' -d@post.json
+                curl https://api.github.com/repos/GouravSna/$REPO_NAME/releases -X POST -u "$GitHubAuth" -H 'Content-Type: application/json' -d@post.json
                 rm ./post.json
 
     # delete temp branch
@@ -112,6 +112,8 @@ EOF
   PREV_TAG=$PLAYKIT_PREV_VERSION
   RELEASE_URL=$REPO_URL/releases/tag/$NEW_TAG
 
+  GitHubAuth=$GITHUB_TOKEN
+
   echo "RELEASE_TYPE = '$RELEASE_TYPE'"
   echo "REPO_NAME = '$REPO_NAME'"
   echo "MODULE_NAME = '$MODULE_NAME'"
@@ -133,12 +135,12 @@ EOF
   set_version
 
   #build
-  #release_and_tag
+  release_and_tag
   #upload_to_bintray ## deprecated
 
   #notify_teams
 
-  #popd
+  popd
 
 #  VERSION_LINE=$(grep 'ext.libVersion' version.gradle)
 #  VERSION_PATTERN="'(.+)'"

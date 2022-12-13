@@ -1,0 +1,62 @@
+name: publish CI
+
+  on:
+    workflow_dispatch:
+      inputs:
+        release_type:
+          type: choice
+          required: true
+          description: 'Release Type'
+          options:
+            - Full
+            - Patch
+            - Update
+        new_version:
+          description: "New Version Name (Without 'v' Ex: 1.0.0)"
+          required: true
+          type: string
+        playkit_prev_version:
+          description: "Previous Playkit Version (Without 'v' Ex: 1.0.0)"
+          required: true
+          type: string
+        playkit_dep_version:
+          description: "Playkit Dependency Version (Without 'v' Ex: 1.0.0)"
+          required: true
+          type: string
+        dtg_dep_version:
+          description: "DTG Version (Without 'v' Ex: 1.0.0)"
+          required: true
+          type: string
+
+  env:
+    RELEASE_TYPE: ${{ inputs.release_type }}
+    NEW_VERSION: ${{ inputs.new_version }}
+    PLAYKIT_PREV_VERSION: ${{ inputs.playkit_prev_version }}
+    PLAYKIT_DEP_VERSION: ${{ inputs.playkit_dep_version }}
+    DTG_DEP_VERSION: ${{ inputs.dtg_dep_version }}
+    REPO_NAME: "GH-TEST"
+    MODULE_NAME: "fbadsplugin"
+
+  jobs:
+
+    MavenRelease:
+      environment: Release
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Checkout repo and clone to CI workspace
+          uses: actions/checkout@v3
+
+        - name: Setup JDK 11
+          uses: actions/setup-java@v3
+          with:
+            java-version: '11'
+            distribution: 'adopt'
+            cache: 'gradle'
+
+        - name: Run publish Script
+          run: |
+            RELEASE_TYPE=${{ RELEASE_TYPE }} NEW_VERSION=${NEW_VERSION} 
+            PLAYKIT_PREV_VERSION=${PLAYKIT_PREV_VERSION} PLAYKIT_DEP_VERSION=${PLAYKIT_DEP_VERSION} 
+            DTG_DEP_VERSION=${DTG_DEP_VERSION} REPO_NAME=${REPO_NAME} 
+            MODULE_NAME=${MODULE_NAME} bash .github/publish.sh

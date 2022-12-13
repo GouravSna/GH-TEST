@@ -50,11 +50,15 @@ build() {
 release_and_tag() {
     echo Releasing version $NEW_VERSION of $REPO_NAME to GitHub
     set +e
-    git add ./$VERSION_FILE
-    git add ./$BUILD_GRADLE
+    git add $VERSION_FILE
+    git add $BUILD_GRADLE
     git commit -m "Update version to $NEW_TAG"
     set -e
     git push origin HEAD:$BRANCH_NAME
+
+    POST_URL=https://api.github.com/repos/GouravSna/$REPO_NAME/releases
+
+    curl $POST_URL -X POST -H "Content-Type: application/json" -H "authorization: Bearer $GitHubAuth" -d@post.json
 
     if [[ "$RELEASE_TYPE" = "Patch" || "$RELEASE_TYPE" = "Full" ]]; then
 

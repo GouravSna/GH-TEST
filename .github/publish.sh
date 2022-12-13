@@ -50,15 +50,15 @@ build() {
 release_and_tag() {
     echo Releasing version $NEW_VERSION of $REPO_NAME to GitHub
     set +e
-    git add $VERSION_FILE
-    git add $BUILD_GRADLE
+    git add /fbadsplugin/version.gradle
+    git add /fbadsplugin/build.gradle
     git commit -m "Update version to $NEW_TAG"
     set -e
     git push origin HEAD:$BRANCH_NAME
 
     POST_URL=https://api.github.com/repos/GouravSna/$REPO_NAME/releases
 
-    curl $POST_URL -X POST -H "Content-Type: application/json" -H "authorization: Bearer $GitHubAuth" -d@post.json
+    curl $POST_URL -X POST -H "Content-Type: application/json" -H "authorization: Bearer $GITHUB_TOKEN" -d@post.json
 
     if [[ "$RELEASE_TYPE" = "Patch" || "$RELEASE_TYPE" = "Full" ]]; then
 
@@ -92,7 +92,7 @@ EOF
     fi
                 cat post.json
 
-                curl https://api.github.com/repos/GouravSna/$REPO_NAME/releases -X POST -u "$GitHubAuth" -H 'Content-Type: application/json' -d@post.json
+                curl https://api.github.com/repos/GouravSna/$REPO_NAME/releases -X POST -u "$GITHUB_TOKEN" -H 'Content-Type: application/json' -d@post.json
                 rm ./post.json
 
     # delete temp branch
@@ -115,8 +115,6 @@ EOF
   NEW_TAG=$NEW_VERSION
   PREV_TAG=$PLAYKIT_PREV_VERSION
   RELEASE_URL=$REPO_URL/releases/tag/$NEW_TAG
-
-  GitHubAuth=$GITHUB_TOKEN
 
   echo "RELEASE_TYPE = '$RELEASE_TYPE'"
   echo "REPO_NAME = '$REPO_NAME'"

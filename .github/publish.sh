@@ -50,8 +50,7 @@ build() {
 release_and_tag() {
     echo Releasing version $NEW_VERSION of $REPO_NAME to GitHub
     set +e
-    git add /fbadsplugin/version.gradle
-    git add /fbadsplugin/build.gradle
+    git status
     git commit -m "Update version to $NEW_TAG"
     set -e
     git push origin HEAD:$BRANCH_NAME

@@ -13,10 +13,6 @@ checkout() {
                 BRANCH_NAME="release/$NEW_TAG"
                 git checkout -b "$BRANCH_NAME" $PREV_TAG
                 ;;
-    Samples)
-                BRANCH_NAME="master"
-                git checkout "$BRANCH_NAME"
-                ;;
                 esac
 }
 
@@ -106,14 +102,7 @@ EOF
   VERSION_FILE=../$MODULE_NAME/version.gradle
   BUILD_GRADLE=../$MODULE_NAME/build.gradle
 
-
-#  REPO_NAME=GH-TEST
-#  MODULE_NAME=fbadsplugin
-#  VERSION_FILE=../$MODULE_NAME/version.gradle
-#  BUILD_GRADLE=../$MODULE_NAME/build.gradle
-#  RELEASE_TYPE="Full"
-
-  REPO_URL=https://github.com/GouravSna/REPO_NAME
+  REPO_URL=https://github.com/GouravSna/$REPO_NAME
   NEW_VERSION=$NEW_VERSION
   PLAYKIT_PREV_VERSION=$PLAYKIT_PREV_VERSION
   PLAYKIT_DEP_VERSION=$PLAYKIT_DEP_VERSION
@@ -121,6 +110,7 @@ EOF
 
   NEW_TAG=$NEW_VERSION
   PREV_TAG=$PLAYKIT_PREV_VERSION
+  RELEASE_URL=$REPO_URL/releases/tag/$NEW_TAG
 
   echo "RELEASE_TYPE = '$RELEASE_TYPE'"
   echo "REPO_NAME = '$REPO_NAME'"
@@ -134,19 +124,14 @@ EOF
   echo "DTG_DEP_VERSION = '$DTG_DEP_VERSION'"
   echo "NEW_TAG = '$NEW_TAG'"
   echo "PREV_TAG = '$PREV_TAG'"
+  echo "RELEASE_URL = '$RELEASE_URL'"
 
-#  REPO_URL=https://github.com/GouravSna/GH-TEST.git
-#  NEW_TAG=v0.1.0
-#  PREV_TAG=v0.1.0
-#  NEW_VERSION=0.1.0
-  #RELEASE_URL=$REPO_URL/releases/tag/$NEW_TAG
+  git clone $REPO_URL
+  pushd $REPO_NAME
 
-  #git clone $REPO_URL
-  #pushd $REPO_NAME
+  checkout
+  set_version
 
-  #checkout
-
-  #set_version
   #build
   #release_and_tag
   #upload_to_bintray ## deprecated

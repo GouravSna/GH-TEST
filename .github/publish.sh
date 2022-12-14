@@ -153,7 +153,7 @@ EOF
   set_version
 
   #build
-  #release_and_tag
+  release_and_tag
   #upload_to_bintray ## deprecated
 
   #notify_teams

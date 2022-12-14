@@ -112,6 +112,7 @@ EOF
 }
 
 notify_teams() {
+
 color=0072C6
   curl "$TEAMS_WEBHOOK" -d @- << EOF
   {

@@ -1,16 +1,15 @@
 checkout() {
 
+    echo Checking out newtag = $NEW_TAG, release type = $RELEASE_TYPE
+
                 case $RELEASE_TYPE in
     Full)
-                BRANCH_NAME="release/$NEW_TAG"
                 git checkout -b "$BRANCH_NAME"
     ;;
     Patch)
-                BRANCH_NAME="patch/$NEW_TAG"
                 git checkout "$BRANCH_NAME"
                 ;;
     Update)
-                BRANCH_NAME="release/$NEW_TAG"
                 git checkout -b "$BRANCH_NAME" $PREV_TAG
                 ;;
                 esac
@@ -98,6 +97,8 @@ EOF
     #git push origin --delete $BRANCH_NAME
 }
 
+
+
   RELEASE_TYPE=$RELEASE_TYPE
 
   REPO_NAME=$REPO_NAME
@@ -110,11 +111,24 @@ EOF
   PLAYKIT_PREV_VERSION=$PLAYKIT_PREV_VERSION
   PLAYKIT_DEP_VERSION=$PLAYKIT_DEP_VERSION
   DTG_DEP_VERSION=$DTG_DEP_VERSION
+#
+#  NEW_TAG=$NEW_VERSION
+#  PREV_TAG=$PLAYKIT_PREV_VERSION
+#  RELEASE_URL=$REPO_URL/releases/tag/$NEW_TAG
 
   NEW_TAG=$NEW_VERSION
   PREV_TAG=$PLAYKIT_PREV_VERSION
   RELEASE_URL=$REPO_URL/releases/tag/$NEW_TAG
 
+  if [[ "$RELEASE_TYPE" = "Full" || "$RELEASE_TYPE" = "Update" ]]; then
+  BRANCH_NAME="release/$NEW_TAG"
+  fi
+
+  if [ "$RELEASE_TYPE" = "Patch" ]; then
+  BRANCH_NAME="patch/$NEW_TAG"
+  fi
+
+  echo "BRANCH_NAME = '$BRANCH_NAME'"
   echo "RELEASE_TYPE = '$RELEASE_TYPE'"
   echo "REPO_NAME = '$REPO_NAME'"
   echo "MODULE_NAME = '$MODULE_NAME'"
@@ -129,9 +143,6 @@ EOF
   echo "PREV_TAG = '$PREV_TAG'"
   echo "RELEASE_URL = '$RELEASE_URL'"
 
-  git clone $REPO_URL
-  pushd $REPO_NAME
-
   checkout
   set_version
 
@@ -140,8 +151,6 @@ EOF
   #upload_to_bintray ## deprecated
 
   #notify_teams
-
-  popd
 
 #  VERSION_LINE=$(grep 'ext.libVersion' version.gradle)
 #  VERSION_PATTERN="'(.+)'"

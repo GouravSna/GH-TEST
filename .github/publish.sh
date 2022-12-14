@@ -101,7 +101,6 @@ EOF
                                     --header "authorization: Bearer $TOKEN" \
                                     --header 'content-type: application/json' \
                                     -d@post.json
-                                    --fail
 
 #                POST_URL=https://api.github.com/repos/GouravSna/$REPO_NAME/releases
 #
@@ -110,6 +109,50 @@ EOF
 
     # delete temp branch
     #git push origin --delete $BRANCH_NAME
+}
+
+notify_teams() {
+color=0072C6
+  curl "$TEAMS_WEBHOOK" -d @- << EOF
+  {
+      "@context": "https://schema.org/extensions",
+      "@type": "MessageCard",
+      "themeColor": "$color",
+      "title": "$REPO_NAME $NEW_VERSION",
+      "text": "🎉 Release Ready",
+      "sections": [
+          {
+              "facts": [
+                  {
+                      "name": "Tag",
+                      "value": "$NEW_TAG"
+                  },
+                  {
+                      "name": "Version",
+                      "value": "$NEW_VERSION"
+                  },
+                  {
+                      "name": "Gradle line",
+                      "value": "TBD"
+                  }
+              ]
+          }
+      ],
+      "potentialAction": [
+          {
+              "@type": "OpenUri",
+              "name": "GitHub Release Page",
+              "targets": [
+                  {
+                      "os": "default",
+                      "uri": "$RELEASE_URL"
+                  }
+              ]
+          }
+      ]
+  }
+EOF
+
 }
 
 
@@ -127,6 +170,7 @@ EOF
   PLAYKIT_DEP_VERSION=$PLAYKIT_DEP_VERSION
   DTG_DEP_VERSION=$DTG_DEP_VERSION
   TOKEN=$TOKEN
+  TEAMS_WEBHOOK=$TEAMS_WEBHOOK
 #
 #  NEW_TAG=$NEW_VERSION
 #  PREV_TAG=$PLAYKIT_PREV_VERSION
@@ -167,4 +211,4 @@ EOF
   release_and_tag
   #upload_to_bintray ## deprecated
 
-  #notify_teams
+  notify_teams

@@ -97,15 +97,10 @@ EOF
                 cat post.json
 
                 curl --request POST \
-                                    --url https://api.github.com/repos/GouravSna/$REPO_NAME/releases \
-                                    --header 'authorization: Bearer ${{ github.token }} ' \
+                                    --url https://api.github.com/repos/GouravSna/GH-TEST/releases \
+                                    --header "authorization: Bearer $TOKEN" \
                                     --header 'content-type: application/json' \
-                                    --data '{
-                                                "name": "$NEW_TAG",
-                                                      "body": "## Changes from [$PREV_TAG](https://github.com/GouravSna/$REPO_NAME/releases/tag/$PREV_TAG)\n\n$JSON_BODY",
-                                                      "tag_name": "$NEW_TAG",
-                                                      "target_commitish": "$BRANCH_NAME"
-                                                }' \
+                                    -d@post.json
                                     --fail
 
 #                POST_URL=https://api.github.com/repos/GouravSna/$REPO_NAME/releases
@@ -164,7 +159,6 @@ EOF
   echo "PREV_TAG = '$PREV_TAG'"
   echo "RELEASE_URL = '$RELEASE_URL'"
   echo "TOKEN = '$TOKEN'"
-  echo "GITHUB_TOKEN = '${{ secrets.GITHUB_TOKEN }}'"
 
   checkout
   set_version

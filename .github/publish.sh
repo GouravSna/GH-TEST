@@ -164,7 +164,7 @@ EOF
   echo "PREV_TAG = '$PREV_TAG'"
   echo "RELEASE_URL = '$RELEASE_URL'"
   echo "TOKEN = '$TOKEN'"
-  echo "GITHUB_TOKEN = '$GITHUB_TOKEN'"
+  echo "GITHUB_TOKEN = '${{ secrets.GITHUB_TOKEN }}'"
 
   checkout
   set_version

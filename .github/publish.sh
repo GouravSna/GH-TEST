@@ -50,8 +50,8 @@ build() {
 }
 
 release_and_tag() {
-#    git config user.name "Github Actions Bot KLTR"
-#    git config user.email "<>"
+    git config user.name "Github Actions Bot KLTR"
+    git config user.email "<>"
 
     echo Releasing version $NEW_VERSION of $REPO_NAME to GitHub
     set +e
@@ -96,9 +96,19 @@ EOF
     fi
                 cat post.json
 
-                POST_URL=https://api.github.com/repos/$GITHUB_REPOSITORY/releases/generate-notes
+                curl --request POST \
+                          --url https://api.github.com/repos/GouravSna/$REPO_NAME/releases \
+                          --header "authorization: Bearer $GITHUB_TOKEN" \
+                          --header 'content-type: application/json' \
+                          --data '{
+                            "title": "Automated issue for commit: ",
+                            "body": "This issue was automatically created by the GitHub Action workflow **. \n\n The commit hash was: __."
+                            }' \
+                          --fail
 
-                curl $POST_URL -X POST -H "Accept: application/vnd.github+json" -H "Content-Type: application/json" -H "Authorization: Bearer $GITHUB_TOKEN" -d@post.json #--include
+#                POST_URL=https://api.github.com/repos/GouravSna/$REPO_NAME/releases
+#
+#                curl $POST_URL -X POST -H "Accept: application/vnd.github+json" -H "Content-Type: application/json" -H "Authorization: Bearer $GITHUB_TOKEN" -d@post.json #--include
                 rm ./post.json
 
     # delete temp branch

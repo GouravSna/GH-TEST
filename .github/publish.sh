@@ -97,7 +97,7 @@ EOF
                 cat post.json
 
                 curl --request POST \
-                                    --url https://api.github.com/repos/${{ github.repository }}/releases \
+                                    --url https://api.github.com/repos/GouravSna/$REPO_NAME/releases \
                                     --header "authorization: Bearer ${{ github.token }} " \
                                     --header 'content-type: application/json' \
                                     -d@post.json \

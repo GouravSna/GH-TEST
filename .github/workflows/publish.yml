@@ -54,6 +54,17 @@ jobs:
           distribution: 'adopt'
           cache: 'gradle'
 
+      - name: check tag
+        run: |
+          curl --request POST \
+                    --url https://api.github.com/repos/${{ github.repository }}/issues \
+                    --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+                    --header 'content-type: application/json' \
+                    --data '{
+                      "title": "Automated issue for commit: ${{ github.sha }}",
+                      "body": "This issue was automatically created by the GitHub Action workflow **${{ github.workflow }}**. \n\n The commit hash was: _${{ github.sha }}_."
+                      }' \
+                    --fail
 #      - name: Print Branch Name
 #        run: |
 #            echo "Branch Name: ${NEW_VERSION}"
@@ -71,9 +82,10 @@ jobs:
 #          git push origin v${NEW_VERSION}
 
 
-      - name: Run publish Script
-        run: |
-          RELEASE_TYPE=${RELEASE_TYPE} NEW_VERSION=${NEW_VERSION}
-          PLAYKIT_PREV_VERSION=${PLAYKIT_PREV_VERSION} PLAYKIT_DEP_VERSION=${PLAYKIT_DEP_VERSION}
-          DTG_DEP_VERSION=${DTG_DEP_VERSION} REPO_NAME=${REPO_NAME}
-          MODULE_NAME=${MODULE_NAME} bash .github/publish.sh
+
+#      - name: Run publish Script
+#        run: |
+#          RELEASE_TYPE=${RELEASE_TYPE} NEW_VERSION=${NEW_VERSION}
+#          PLAYKIT_PREV_VERSION=${PLAYKIT_PREV_VERSION} PLAYKIT_DEP_VERSION=${PLAYKIT_DEP_VERSION}
+#          DTG_DEP_VERSION=${DTG_DEP_VERSION} REPO_NAME=${REPO_NAME}
+#          MODULE_NAME=${MODULE_NAME} bash .github/publish.sh

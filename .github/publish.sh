@@ -203,6 +203,7 @@ EOF
   echo "PREV_TAG = '$PREV_TAG'"
   echo "RELEASE_URL = '$RELEASE_URL'"
   echo "TOKEN = '$TOKEN'"
+  echo "TEAMS_WEBHOOK = '$TEAMS_WEBHOOK'"
 
   checkout
   set_version

@@ -34,7 +34,7 @@ env:
   PLAYKIT_PREV_VERSION: ${{ inputs.playkit_prev_version }}
   PLAYKIT_DEP_VERSION: ${{ inputs.playkit_dep_version }}
   DTG_DEP_VERSION: ${{ inputs.dtg_dep_version }}
-  REPO_NAME: "GH-TEST"
+  REPO_NAME: ${{ github.event.repository.name }}
   MODULE_NAME: "fbadsplugin"
 
 jobs:
@@ -53,36 +53,6 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
           cache: 'gradle'
-
-#      - name: check tag
-#        run: |
-#          curl --request POST \
-#                    --url https://api.github.com/repos/${{ github.repository }}/issues \
-#                    --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
-#                    --header 'content-type: application/json' \
-#                    --data '{
-#                      "title": "Automated issue for commit: ${{ github.sha }}",
-#                      "body": "This issue was automatically created by the GitHub Action workflow **${{ github.workflow }}**. \n\n The commit hash was: _${{ github.sha }}_."
-#                      }' \
-#                    --fail
-#      - name: Print Branch Name
-#        run: |
-#            echo "Branch Name: ${NEW_VERSION}"
-#      - name: Setup Github Config
-#        run: |
-#          git config user.name "Github Actions Bot KLTR"
-#          git config user.email "<>"
-#      - name: Create Branch
-#        run: |
-#          git branch ${RELEASE_TYPE}/v${NEW_VERSION}
-#          git push origin ${RELEASE_TYPE}/v${NEW_VERSION}
-#      - name: Create Tag 🏷️
-#        run: |
-#          git tag v${NEW_VERSION} ${GITHUB_SHA}
-#          git push origin v${NEW_VERSION}
-
-
-
       - name: Run publish Script
         run: |
           RELEASE_TYPE=${RELEASE_TYPE} NEW_VERSION=${NEW_VERSION}

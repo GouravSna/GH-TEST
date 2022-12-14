@@ -96,8 +96,10 @@ EOF
     fi
                 cat post.json
 
-                curl https://api.github.com/repos/GouravSna/$REPO_NAME/releases -X POST -u "$GITHUB_TOKEN" -H 'Content-Type: application/json' -d@post.json
-#                rm ./post.json
+                POST_URL=https://api.github.com/repos/$GITHUB_REPOSITORY/releases/generate-notes
+
+                curl $POST_URL -X POST -H "Accept: application/vnd.github+json" -H "Content-Type: application/json" -H "Authorization: Bearer $GITHUB_TOKEN" -d@post.json #--include
+                rm ./post.json
 
     # delete temp branch
     #git push origin --delete $BRANCH_NAME

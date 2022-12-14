@@ -19,6 +19,9 @@ set_version() {
     echo Setting version of $REPO_NAME to $NEW_VERSION
     perl -pi -e "s/^ext.libVersion.*$/ext.libVersion = '$NEW_VERSION'/" $VERSION_FILE
 
+    echo $(pwd)
+    echo $(ls)
+
     if [[ "$RELEASE_TYPE" = "Patch" || "$RELEASE_TYPE" = "Update" ]]; then
        echo "RELEASE_TYPE = '$RELEASE_TYPE'"
        perl -pi -e "s/playkit:playkit:$PLAYKIT_PREV_VERSION/playkit:playkit:$PLAYKIT_DEP_VERSION/" $BUILD_GRADLE
@@ -150,7 +153,7 @@ EOF
   set_version
 
   #build
-  release_and_tag
+  #release_and_tag
   #upload_to_bintray ## deprecated
 
   #notify_teams

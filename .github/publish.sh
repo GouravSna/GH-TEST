@@ -97,14 +97,11 @@ EOF
                 cat post.json
 
                 curl --request POST \
-                          --url https://api.github.com/repos/GouravSna/$REPO_NAME/releases \
-                          --header "authorization: Bearer $GITHUB_TOKEN" \
-                          --header 'content-type: application/json' \
-                          --data '{
-                            "title": "Automated issue for commit: ",
-                            "body": "This issue was automatically created by the GitHub Action workflow **. \n\n The commit hash was: __."
-                            }' \
-                          --fail
+                                    --url https://api.github.com/repos/GouravSna/GH-TEST/releases \
+                                    --header "authorization: Bearer $TOKEN " \
+                                    --header 'content-type: application/json' \
+                                    -d@post.json \
+                                    --fail
 
 #                POST_URL=https://api.github.com/repos/GouravSna/$REPO_NAME/releases
 #
@@ -129,6 +126,7 @@ EOF
   PLAYKIT_PREV_VERSION=$PLAYKIT_PREV_VERSION
   PLAYKIT_DEP_VERSION=$PLAYKIT_DEP_VERSION
   DTG_DEP_VERSION=$DTG_DEP_VERSION
+  TOKEN=$TOKEN
 #
 #  NEW_TAG=$NEW_VERSION
 #  PREV_TAG=$PLAYKIT_PREV_VERSION

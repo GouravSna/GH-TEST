@@ -109,8 +109,8 @@ EOF
 
   REPO_NAME=$REPO_NAME
   MODULE_NAME=$MODULE_NAME
-  VERSION_FILE=../$MODULE_NAME/version.gradle
-  BUILD_GRADLE=../$MODULE_NAME/build.gradle
+  VERSION_FILE=$MODULE_NAME/version.gradle
+  BUILD_GRADLE=$MODULE_NAME/build.gradle
 
   REPO_URL=https://github.com/GouravSna/$REPO_NAME
   NEW_VERSION=$NEW_VERSION

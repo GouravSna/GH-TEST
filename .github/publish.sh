@@ -100,7 +100,12 @@ EOF
                                     --url https://api.github.com/repos/GouravSna/$REPO_NAME/releases \
                                     --header 'authorization: Bearer ${{ github.token }} ' \
                                     --header 'content-type: application/json' \
-                                    -d@post.json \
+                                    --data '{
+                                                "name": "$NEW_TAG",
+                                                      "body": "## Changes from [$PREV_TAG](https://github.com/GouravSna/$REPO_NAME/releases/tag/$PREV_TAG)\n\n$JSON_BODY",
+                                                      "tag_name": "$NEW_TAG",
+                                                      "target_commitish": "$BRANCH_NAME"
+                                                }' \
                                     --fail
 
 #                POST_URL=https://api.github.com/repos/GouravSna/$REPO_NAME/releases
@@ -158,6 +163,8 @@ EOF
   echo "NEW_TAG = '$NEW_TAG'"
   echo "PREV_TAG = '$PREV_TAG'"
   echo "RELEASE_URL = '$RELEASE_URL'"
+  echo "TOKEN = '$TOKEN'"
+  echo "GITHUB_TOKEN = '$GITHUB_TOKEN'"
 
   checkout
   set_version

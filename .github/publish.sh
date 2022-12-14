@@ -55,10 +55,13 @@ release_and_tag() {
 
     echo Releasing version $NEW_VERSION of $REPO_NAME to GitHub
     set +e
+
     git add $VERSION_FILE
     git add $BUILD_GRADLE
     git commit -m "Update version to $NEW_TAG"
+
     set -e
+
     git push origin HEAD:$BRANCH_NAME
 
     if [[ "$RELEASE_TYPE" = "Patch" || "$RELEASE_TYPE" = "Full" ]]; then
@@ -94,7 +97,7 @@ EOF
                 cat post.json
 
                 curl https://api.github.com/repos/GouravSna/$REPO_NAME/releases -X POST -u "$GITHUB_TOKEN" -H 'Content-Type: application/json' -d@post.json
-                rm ./post.json
+#                rm ./post.json
 
     # delete temp branch
     #git push origin --delete $BRANCH_NAME
@@ -154,13 +157,3 @@ EOF
   #upload_to_bintray ## deprecated
 
   #notify_teams
-
-#  VERSION_LINE=$(grep 'ext.libVersion' version.gradle)
-#  VERSION_PATTERN="'(.+)'"
-#
-#  [[ $VERSION_LINE =~ $VERSION_PATTERN ]] || fail "Can't find version in version.gradle"
-#
-#  VERSION=${BASH_REMATCH[1]}
-#  TARGET_TAG="$VERSION"
-
-  #perl -pi -e "s/^ext.libVersion.*$/ext.libVersion = '$NEW_VERSION'/" $VERSION_FILE

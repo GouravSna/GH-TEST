@@ -54,26 +54,26 @@ jobs:
           distribution: 'adopt'
           cache: 'gradle'
 
-      - name: Print Branch Name
-        run: |
-            echo "Branch Name: ${NEW_VERSION}"
-      - name: Setup Github Config
-        run: |
-          git config user.name "Github Actions Bot KLTR"
-          git config user.email "<>"
-      - name: Create Branch
-        run: |
-          git branch ${RELEASE_TYPE}/v${NEW_VERSION}
-          git push origin ${RELEASE_TYPE}/v${NEW_VERSION}
-      - name: Create Tag 🏷️
-        run: |
-          git tag v${NEW_VERSION} ${GITHUB_SHA}
-          git push origin v${NEW_VERSION}
-
-
-#      - name: Run publish Script
+#      - name: Print Branch Name
 #        run: |
-#          RELEASE_TYPE=${RELEASE_TYPE} NEW_VERSION=${NEW_VERSION}
-#          PLAYKIT_PREV_VERSION=${PLAYKIT_PREV_VERSION} PLAYKIT_DEP_VERSION=${PLAYKIT_DEP_VERSION}
-#          DTG_DEP_VERSION=${DTG_DEP_VERSION} REPO_NAME=${REPO_NAME}
-#          MODULE_NAME=${MODULE_NAME} bash .github/publish.sh
+#            echo "Branch Name: ${NEW_VERSION}"
+#      - name: Setup Github Config
+#        run: |
+#          git config user.name "Github Actions Bot KLTR"
+#          git config user.email "<>"
+#      - name: Create Branch
+#        run: |
+#          git branch ${RELEASE_TYPE}/v${NEW_VERSION}
+#          git push origin ${RELEASE_TYPE}/v${NEW_VERSION}
+#      - name: Create Tag 🏷️
+#        run: |
+#          git tag v${NEW_VERSION} ${GITHUB_SHA}
+#          git push origin v${NEW_VERSION}
+
+
+      - name: Run publish Script
+        run: |
+          RELEASE_TYPE=${RELEASE_TYPE} NEW_VERSION=${NEW_VERSION}
+          PLAYKIT_PREV_VERSION=${PLAYKIT_PREV_VERSION} PLAYKIT_DEP_VERSION=${PLAYKIT_DEP_VERSION}
+          DTG_DEP_VERSION=${DTG_DEP_VERSION} REPO_NAME=${REPO_NAME}
+          MODULE_NAME=${MODULE_NAME} bash .github/publish.sh

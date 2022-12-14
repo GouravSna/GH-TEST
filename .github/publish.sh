@@ -47,6 +47,9 @@ build() {
 }
 
 release_and_tag() {
+    git config user.name "Github Actions Bot KLTR"
+    git config user.email "<>"
+
     echo Releasing version $NEW_VERSION of $REPO_NAME to GitHub
     set +e
     git status

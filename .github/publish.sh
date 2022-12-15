@@ -6,7 +6,8 @@ fail() {
 checkout() {
     echo Checking out newtag = "$NEW_TAG", release type = "$RELEASE_TYPE"
 
-    git tag -n
+    ls
+    git tag -n99
 
     case $RELEASE_TYPE in
       Full)

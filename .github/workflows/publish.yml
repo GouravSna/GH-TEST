@@ -53,6 +53,7 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
           cache: 'gradle'
+
       - name: Run publish Script
         run: |
           RELEASE_TYPE=${RELEASE_TYPE} NEW_VERSION=${NEW_VERSION}

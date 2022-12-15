@@ -70,7 +70,7 @@ release_and_tag() {
     git push origin HEAD:$BRANCH_NAME || fail "Unable to push $BRANCH_NAME"
 
     if [[ "$RELEASE_TYPE" = "Patch" || "$RELEASE_TYPE" = "Full" ]]; then
-        JSON_BODY="\n\n$JSON_BODY'"
+        JSON_BODY="\n\nTBD"
     fi
 
     if [ "$RELEASE_TYPE" = "Update" ]; then

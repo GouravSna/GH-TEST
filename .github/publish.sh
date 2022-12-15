@@ -4,20 +4,22 @@ fail() {
 }
 
 checkout() {
-    echo Checking out newtag = $NEW_TAG, release type = $RELEASE_TYPE
+    echo Checking out newtag = "$NEW_TAG", release type = "$RELEASE_TYPE"
+
+    git tag -n
 
     case $RELEASE_TYPE in
       Full)
           git checkout -b "$BRANCH_NAME" || fail "Unable to checkout $BRANCH_NAME";;
       Patch)
-          git checkout -b "$BRANCH_NAME" || fail "Unable to checkout $BRANCH_NAME";;
+          git checkout -b "$BRANCH_NAME" "$PREV_TAG" || fail "Unable to checkout $BRANCH_NAME";;
       Update)
-          git checkout -b "$BRANCH_NAME" $PREV_TAG || fail "Unable to checkout $BRANCH_NAME";;
+          git checkout -b "$BRANCH_NAME" "$PREV_TAG" || fail "Unable to checkout $BRANCH_NAME";;
     esac
 }
 
 set_version() {
-    echo Setting version of $REPO_NAME to $NEW_VERSION
+    echo Setting version of "$REPO_NAME" to "$NEW_VERSION"
 
     # Changing the version in version.gradle file
     if [ "$COMPONENT" = "netkit" ]; then

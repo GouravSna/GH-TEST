@@ -3,6 +3,8 @@ fail() {
     exit 1
 }
 
+# patching 6.0.0
+
 checkout() {
     echo Checking out newtag = "$NEW_TAG", release type = "$RELEASE_TYPE"
     git fetch --all

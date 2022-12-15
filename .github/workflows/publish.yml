@@ -20,7 +20,7 @@ on:
         required: true
         type: string
       playkit_dep_version:
-        description: "Playkit Dependency Version (Without 'v' Ex: 1.0.0)"
+        description: "Playkit Dependency Version for Patch and Update (Without 'v' Ex: 1.0.0)"
         required: true
         type: string
       dtg_dep_version:

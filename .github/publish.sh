@@ -11,7 +11,7 @@ checkout() {
       Full)
           git checkout -b "$BRANCH_NAME" || fail "Unable to checkout $BRANCH_NAME";;
       Patch)
-          git checkout -b "$BRANCH_NAME" "$PREV_TAG" || fail "Unable to checkout $BRANCH_NAME";;
+          git checkout "$BRANCH_NAME" || fail "Unable to checkout $BRANCH_NAME";;
       Update)
           git checkout -b "$BRANCH_NAME" "$PREV_TAG" || fail "Unable to checkout $BRANCH_NAME";;
     esac

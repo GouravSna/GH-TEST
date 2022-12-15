@@ -70,7 +70,15 @@ release_and_tag() {
     git push origin HEAD:$BRANCH_NAME || fail "Unable to push $BRANCH_NAME"
 
     if [[ "$RELEASE_TYPE" = "Patch" || "$RELEASE_TYPE" = "Full" ]]; then
-        JSON_BODY="\n\nTBD"
+
+cat << EOF > ./post.json
+{
+      "name": "$NEW_TAG",
+      "body": "## Changes from [$PREV_TAG](https://github.com/GouravSna/$REPO_NAME/releases/tag/$PREV_TAG)\n\nTBD",
+      "tag_name": "$NEW_TAG",
+      "target_commitish": "$BRANCH_NAME"
+}
+EOF
     fi
 
     if [ "$RELEASE_TYPE" = "Update" ]; then
@@ -80,11 +88,8 @@ release_and_tag() {
       JSON_BODY="$JSON_BODY #### Gradle\n\n"
                   JSON_BODY="$JSON_BODY * implementation 'com.kaltura.playkit:"
       JSON_BODY="$JSON_BODY$MODULE_NAME:$NEW_VERSION"
-      JSON_BODY="$JSON_BODY'\n\n"
-    fi
+      JSON_BODY="$JSON_BODY'"
 
-    JSON_BODY=$(cat "$RELEASE_NOTES")
-    echo "$JSON_BODY"
 
 cat << EOF > ./post.json
 {
@@ -94,6 +99,8 @@ cat << EOF > ./post.json
       "target_commitish": "$BRANCH_NAME"
 }
 EOF
+    fi
+
     cat post.json
 
     curl --request POST \

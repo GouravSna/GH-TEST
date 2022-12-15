@@ -5,10 +5,7 @@ fail() {
 
 checkout() {
     echo Checking out newtag = "$NEW_TAG", release type = "$RELEASE_TYPE"
-
     git fetch --all
-    ls
-    git tag -n99
 
     case $RELEASE_TYPE in
       Full)
@@ -91,7 +88,10 @@ EOF
       JSON_BODY="$JSON_BODY #### Gradle\n\n"
                   JSON_BODY="$JSON_BODY * implementation 'com.kaltura.playkit:"
       JSON_BODY="$JSON_BODY$MODULE_NAME:$NEW_VERSION"
-      JSON_BODY="$JSON_BODY'"
+      JSON_BODY="$JSON_BODY'\n\n"
+
+      JSON_BODY=$(cat "$RELEASE_NOTES")
+      echo "$JSON_BODY"
 
 cat << EOF > ./post.json
 {
@@ -179,6 +179,8 @@ EOF
   NEW_TAG=v$NEW_VERSION
   PREV_TAG=v$PLAYKIT_PREV_VERSION
   RELEASE_URL=$REPO_URL/releases/tag/$NEW_TAG
+
+  RELEASE_NOTES="release_notes.md"
 
   if [[ "$RELEASE_TYPE" = "Full" || "$RELEASE_TYPE" = "Update" ]]; then
   BRANCH_NAME="release/$NEW_TAG"

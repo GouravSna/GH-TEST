@@ -6,6 +6,7 @@ fail() {
 checkout() {
     echo Checking out newtag = "$NEW_TAG", release type = "$RELEASE_TYPE"
 
+    git fetch --all
     ls
     git tag -n99
 

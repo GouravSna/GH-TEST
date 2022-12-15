@@ -1,13 +1,18 @@
+fail() {
+    echo "$@" 1>&2
+    exit 1
+}
+
 checkout() {
     echo Checking out newtag = $NEW_TAG, release type = $RELEASE_TYPE
 
     case $RELEASE_TYPE in
-    Full)
-        git checkout -b "$BRANCH_NAME";;
-    Patch)
-        git checkout "$BRANCH_NAME";;
-    Update)
-        git checkout -b "$BRANCH_NAME" $PREV_TAG;;
+      Full)
+          git checkout -b "$BRANCH_NAME" || fail "Unable to checkout $BRANCH_NAME";;
+      Patch)
+          git checkout -b "$BRANCH_NAME" $PREV_TAG || fail "Unable to checkout $BRANCH_NAME";;
+      Update)
+          git checkout -b "$BRANCH_NAME" $PREV_TAG || fail "Unable to checkout $BRANCH_NAME";;
     esac
 }
 
@@ -16,7 +21,7 @@ set_version() {
 
     # Changing the version in version.gradle file
     if [ "$COMPONENT" = "netkit" ]; then
-           perl -pi -e "s/^ext.netkitVersion.*$/ext.netkitVersion = '$NEW_VERSION'/" $NETKIT_SERVICES_VERSION_FILE
+       perl -pi -e "s/^ext.netkitVersion.*$/ext.netkitVersion = '$NEW_VERSION'/" $NETKIT_SERVICES_VERSION_FILE
     fi
 
     perl -pi -e "s/^ext.netkitVersion.*$/ext.netkitVersion = '$NEW_VERSION'/" $VERSION_FILE
@@ -27,12 +32,12 @@ set_version() {
     # Changing the version in build.gradle file
     if [[ "$RELEASE_TYPE" = "Patch" || "$RELEASE_TYPE" = "Update" ]]; then
        echo "RELEASE_TYPE = '$RELEASE_TYPE'"
-       perl -pi -e "s/playkit:playkit:$PLAYKIT_PREV_VERSION/playkit:playkit:$PLAYKIT_DEP_VERSION/" $BUILD_GRADLE
-       perl -pi -e "s/playkit:playkitproviders:$PLAYKIT_PREV_VERSION/playkit:playkitproviders:$PLAYKIT_DEP_VERSION/" $BUILD_GRADLE
-       perl -pi -e "s/playkit:kavaplugin:$PLAYKIT_PREV_VERSION/playkit:kavaplugin:$PLAYKIT_DEP_VERSION/" $BUILD_GRADLE
-       perl -pi -e "s/playkit:broadpeakplugin:$PLAYKIT_PREV_VERSION/playkit:broadpeakplugin:$PLAYKIT_DEP_VERSION/" $BUILD_GRADLE
-       perl -pi -e "s/playkit:smartswitchplugin:$PLAYKIT_PREV_VERSION/playkit:smartswitchplugin:$PLAYKIT_DEP_VERSION/" $BUILD_GRADLE
-       perl -pi -e "s/player:tvplayer:$PLAYKIT_PREV_VERSION/player:tvplayer:$PLAYKIT_DEP_VERSION/" $BUILD_GRADLE
+       perl -pi -e "s/playkit:playkit:$PLAYKIT_PREV_VERSION/playkit:playkit:$NEW_VERSION/" $BUILD_GRADLE
+       perl -pi -e "s/playkit:playkitproviders:$PLAYKIT_PREV_VERSION/playkit:playkitproviders:$NEW_VERSION/" $BUILD_GRADLE
+       perl -pi -e "s/playkit:kavaplugin:$PLAYKIT_PREV_VERSION/playkit:kavaplugin:$NEW_VERSION/" $BUILD_GRADLE
+       perl -pi -e "s/playkit:broadpeakplugin:$PLAYKIT_PREV_VERSION/playkit:broadpeakplugin:$NEW_VERSION/" $BUILD_GRADLE
+       perl -pi -e "s/playkit:smartswitchplugin:$PLAYKIT_PREV_VERSION/playkit:smartswitchplugin:$NEW_VERSION/" $BUILD_GRADLE
+       perl -pi -e "s/player:tvplayer:$PLAYKIT_PREV_VERSION/player:tvplayer:$NEW_VERSION/" $BUILD_GRADLE
        perl -pi -e "s/dtg:dtglib:$DTG_PREV_VERSION/dtg:dtglib:$DTG_DEP_VERSION/" $BUILD_GRADLE
     fi
 
@@ -57,11 +62,11 @@ release_and_tag() {
 
     echo Releasing version $NEW_VERSION of $REPO_NAME to GitHub
     set +e
-    git add $VERSION_FILE
-    git add $BUILD_GRADLE
+    git add $VERSION_FILE || fail "Version file not found $VERSION_FILE"
+    git add $BUILD_GRADLE || fail "Build file not found $BUILD_GRADLE"
     git commit -m "Update version to $NEW_TAG"
     set -e
-    git push origin HEAD:$BRANCH_NAME
+    git push origin HEAD:$BRANCH_NAME || fail "Unable to push $BRANCH_NAME"
 
     if [[ "$RELEASE_TYPE" = "Patch" || "$RELEASE_TYPE" = "Full" ]]; then
 
@@ -163,7 +168,6 @@ EOF
   REPO_URL=https://github.com/GouravSna/$REPO_NAME
   NEW_VERSION=$NEW_VERSION
   PLAYKIT_PREV_VERSION=$PLAYKIT_PREV_VERSION
-  PLAYKIT_DEP_VERSION=$PLAYKIT_DEP_VERSION
   DTG_DEP_VERSION=$DTG_DEP_VERSION
   TOKEN=$TOKEN
   TEAMS_WEBHOOK=$TEAMS_WEBHOOK
@@ -189,7 +193,6 @@ EOF
 #  echo "REPO_URL = '$REPO_URL'"
 #  echo "NEW_VERSION = '$NEW_VERSION'"
 #  echo "PLAYKIT_PREV_VERSION = '$PLAYKIT_PREV_VERSION'"
-#  echo "PLAYKIT_DEP_VERSION = '$PLAYKIT_DEP_VERSION'"
 #  echo "DTG_DEP_VERSION = '$DTG_DEP_VERSION'"
 #  echo "NEW_TAG = '$NEW_TAG'"
 #  echo "PREV_TAG = '$PREV_TAG'"

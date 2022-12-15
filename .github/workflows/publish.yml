@@ -12,15 +12,11 @@ on:
           - Patch
           - Update
       new_version:
-        description: "New Version Name (Without 'v' Ex: 1.0.0)"
+        description: "New Player Version (Without 'v' Ex: 1.0.0)"
         required: true
         type: string
       playkit_prev_version:
-        description: "Previous Playkit Version (Without 'v' Ex: 1.0.0)"
-        required: true
-        type: string
-      playkit_dep_version:
-        description: "Playkit Dependency Version for Patch and Update (Without 'v' Ex: 1.0.0)"
+        description: "Previous Player Version (Without 'v' Ex: 1.0.0): Important for Patch and Update"
         required: true
         type: string
       dtg_dep_version:
@@ -32,7 +28,6 @@ env:
   RELEASE_TYPE: ${{ inputs.release_type }}
   NEW_VERSION: ${{ inputs.new_version }}
   PLAYKIT_PREV_VERSION: ${{ inputs.playkit_prev_version }}
-  PLAYKIT_DEP_VERSION: ${{ inputs.playkit_dep_version }}
   DTG_DEP_VERSION: ${{ inputs.dtg_dep_version }}
   REPO_NAME: ${{ github.event.repository.name }}
   MODULE_NAME: "fbadsplugin"
@@ -57,6 +52,5 @@ jobs:
       - name: Run publish Script
         run: |
           RELEASE_TYPE=${RELEASE_TYPE} NEW_VERSION=${NEW_VERSION}
-          PLAYKIT_PREV_VERSION=${PLAYKIT_PREV_VERSION} PLAYKIT_DEP_VERSION=${PLAYKIT_DEP_VERSION}
-          DTG_DEP_VERSION=${DTG_DEP_VERSION} REPO_NAME=${REPO_NAME}
+          PLAYKIT_PREV_VERSION=${PLAYKIT_PREV_VERSION} DTG_DEP_VERSION=${DTG_DEP_VERSION} REPO_NAME=${REPO_NAME}
           TOKEN=${{ secrets.GITHUB_TOKEN }} MODULE_NAME=${MODULE_NAME} TEAMS_WEBHOOK=${{ secrets.TEAMSWEBHOOK }} bash .github/publish.sh

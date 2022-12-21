@@ -41,6 +41,7 @@ jobs:
   MavenRelease:
     environment: Release
     runs-on: ubuntu-latest
+    needs: GradleBuild
 
     steps:
       - name: Checkout repo and clone to CI workspace

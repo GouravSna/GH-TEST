@@ -10,6 +10,15 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  RELEASE_TYPE: ${{ inputs.release_type }}
+  NEW_VERSION: ${{ inputs.new_version }}
+  PLAYKIT_PREV_VERSION: ${{ inputs.playkit_prev_version }}
+  DTG_DEP_VERSION: ${{ inputs.dtg_dep_version }}
+  REPO_NAME: ${{ github.event.repository.name }}
+  MODULE_NAME: "fbadsplugin"
+  MY_SECRET: ${{ secrets.MY_SECRET }}
+
 jobs:
 
   TestBuild:

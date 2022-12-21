@@ -35,6 +35,9 @@ env:
 
 jobs:
 
+  GradleBuild:
+    uses: ./.github/workflows/build.yml
+
   MavenRelease:
     environment: Release
     runs-on: ubuntu-latest

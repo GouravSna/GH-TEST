@@ -58,7 +58,7 @@ build() {
 }
 
 release_and_tag() {
-    git config user.name "Github Actions Bot KLTR"
+    git config user.name "$GH_USER_NAME"
     git config user.email "<>"
 
     echo Releasing version $NEW_VERSION of $REPO_NAME to GitHub
@@ -116,6 +116,7 @@ EOF
 }
 
 notify_teams() {
+ COMMIT_SHA=git log --pretty=format:'%h' -n 1
 
 color=0072C6
   curl "$TEAMS_WEBHOOK" -d @- << EOF
@@ -123,22 +124,26 @@ color=0072C6
       "@context": "https://schema.org/extensions",
       "@type": "MessageCard",
       "themeColor": "$color",
-      "title": "$REPO_NAME $NEW_VERSION",
+      "title": "$REPO_NAME | $BRANCH_NAME",
       "text": "🎉 Release Ready",
       "sections": [
           {
               "facts": [
                   {
-                      "name": "Tag",
-                      "value": "$NEW_TAG"
+                      "name": "Branch/tag",
+                      "value": "$BRANCH_NAME"
                   },
                   {
-                      "name": "Version",
-                      "value": "$NEW_VERSION"
+                      "name": "Commit",
+                      "value": "$COMMIT_SHA"
+                  },
+                  {
+                      "name": "Pusher",
+                      "value": "$GH_USER_NAME"
                   },
                   {
                       "name": "Gradle line",
-                      "value": "TBD"
+                      "value": "implementation 'com.kaltura.netkit:netkit-core:$COMMIT_SHA'"
                   }
               ]
           }
@@ -160,6 +165,7 @@ EOF
 
 }
 
+  GH_USER_NAME="Github Actions Bot KLTR"
   RELEASE_TYPE=$RELEASE_TYPE
 
   REPO_NAME=$REPO_NAME

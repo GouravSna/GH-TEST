@@ -116,7 +116,7 @@ EOF
 }
 
 notify_teams() {
- COMMIT_SHA=git log --pretty=format:'%h' -n 1
+COMMIT_SHA=$(git log --pretty=format:'%h' -n 1)
 
 color=0072C6
   curl "$TEAMS_WEBHOOK" -d @- << EOF

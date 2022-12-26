@@ -117,6 +117,7 @@ EOF
 
 notify_teams() {
 COMMIT_SHA=$(git log --pretty=format:'%h' -n 1)
+COMMIT_MESSAGE=$(git log --format=%B -n 1 "$COMMIT_SHA")
 
 color=0072C6
   curl "$TEAMS_WEBHOOK" -d @- << EOF
@@ -135,7 +136,7 @@ color=0072C6
                   },
                   {
                       "name": "Commit",
-                      "value": "$COMMIT_SHA"
+                      "value": "$COMMIT_SHA ($COMMIT_MESSAGE)"
                   },
                   {
                       "name": "Pusher",

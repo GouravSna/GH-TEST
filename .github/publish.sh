@@ -71,7 +71,7 @@ release_and_tag() {
 
     if [[ "$RELEASE_TYPE" = "Patch" || "$RELEASE_TYPE" = "Full" ]]; then
 
-    testvar=$(cat $RELEASE_NOTES)
+    testvar=$(awk -v d="\\\n" '{s=(NR==1?s:s d)$0}END{print s}' $RELEASE_NOTES)
     #nw_strr="${testvar//$'\n'/ }"
 
 cat << EOF > ./post.json
@@ -238,3 +238,4 @@ EOF
 #testvar=$(perl -pe 's/\n/\n/g' $RELEASE_NOTES)
 #
 #printf $testvar
+

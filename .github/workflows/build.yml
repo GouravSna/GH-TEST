@@ -34,7 +34,11 @@ jobs:
           
       - name: print log
         run: |
-          IFS='' git log --oneline v1.12.0..Head --grep='(#' | cut -d' ' -f2-
+          git log v1.12.0..HEAD --oneline
+          
+      - name: print log-2
+        run: |
+          git log --oneline v1.12.0..Head --grep='(#'
       
       - name: Setup JDK 11
         uses: actions/setup-java@v3

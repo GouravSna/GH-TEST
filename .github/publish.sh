@@ -72,12 +72,23 @@ release_and_tag() {
     if [[ "$RELEASE_TYPE" = "Patch" || "$RELEASE_TYPE" = "Full" ]]; then
 
       testvar=$(cat $RELEASE_NOTES)
-      echo "$testvar"
+
+            JSON_BODY="### Plugin Playkit Support\n\n"
+                        JSON_BODY="$JSON_BODY$NEW_TAG\n\n"
+            JSON_BODY="$JSON_BODY * upgrade to $NEW_TAG\n\n"
+            JSON_BODY="$JSON_BODY $testvar\n\n"
+            JSON_BODY="$JSON_BODY #### Gradle\n\n"
+                        JSON_BODY="$JSON_BODY * implementation 'com.kaltura.playkit:"
+            JSON_BODY="$JSON_BODY$MODULE_NAME:$NEW_VERSION"
+            JSON_BODY="$JSON_BODY'"
+
+
+      #      echo "$testvar"
 
 cat << EOF > ./post.json
 {
       "name": "$NEW_TAG",
-      "body": "## Changes from [$PREV_TAG](https://github.com/GouravSna/$REPO_NAME/releases/tag/$PREV_TAG)\n\n$testvar",
+      "body": "## Changes from [$PREV_TAG](https://github.com/GouravSna/$REPO_NAME/releases/tag/$PREV_TAG)\n\n$JSON_BODY",
       "tag_name": "$NEW_TAG",
       "target_commitish": "$BRANCH_NAME"
 }

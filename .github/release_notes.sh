@@ -4,7 +4,7 @@ release_and_tag() {
          --url https://api.github.com/repos/GouravSna/GH-TEST/pulls \
          -H "Accept: application/vnd.github+json" \
          -H "authorization: Bearer $TOKEN" \
-         -H "X-GitHub-Api-Version: 2022-11-28" \
+         -H "X-GitHub-Api-Version: 2022-11-28"
 }
 
 TOKEN=$TOKEN

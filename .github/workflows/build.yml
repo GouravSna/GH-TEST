@@ -32,7 +32,6 @@ jobs:
       
       - name: logging
         run: |
-          git reflog
           git log
 
 #       - name: Setup JDK 11

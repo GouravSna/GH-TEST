@@ -188,7 +188,7 @@ EOF
   PREV_TAG=v$PLAYKIT_PREV_VERSION
   RELEASE_URL=$REPO_URL/releases/tag/$NEW_TAG
 
-  RELEASE_NOTES="../release_notes.md"
+  RELEASE_NOTES="release_notes.md"
 
   if [[ "$RELEASE_TYPE" = "Full" || "$RELEASE_TYPE" = "Update" ]]; then
   BRANCH_NAME="release/$NEW_TAG"

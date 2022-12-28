@@ -38,7 +38,7 @@ jobs:
       
       - name: print log-1
         run: |
-          git log v1.12.0..HEAD --oneline
+          git log v1.12.0..v25.1.0 --oneline
           
       - name: print log-2
         run: |

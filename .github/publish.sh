@@ -71,10 +71,13 @@ release_and_tag() {
 
     if [[ "$RELEASE_TYPE" = "Patch" || "$RELEASE_TYPE" = "Full" ]]; then
 
+    testvar=$(cat $RELEASE_NOTES)
+    #nw_strr="${testvar//$'\n'/ }"
+
 cat << EOF > ./post.json
 {
       "name": "$NEW_TAG",
-      "body": "## Changes from [$PREV_TAG](https://github.com/GouravSna/$REPO_NAME/releases/tag/$PREV_TAG)\n\nTBD",
+      "body": "## Changes from [$PREV_TAG](https://github.com/GouravSna/$REPO_NAME/releases/tag/$PREV_TAG)\n\n$testvar",
       "tag_name": "$NEW_TAG",
       "target_commitish": "$BRANCH_NAME"
 }
@@ -185,7 +188,7 @@ EOF
   PREV_TAG=v$PLAYKIT_PREV_VERSION
   RELEASE_URL=$REPO_URL/releases/tag/$NEW_TAG
 
-  RELEASE_NOTES="release_notes.md"
+  RELEASE_NOTES="../release_notes.md"
 
   if [[ "$RELEASE_TYPE" = "Full" || "$RELEASE_TYPE" = "Update" ]]; then
   BRANCH_NAME="release/$NEW_TAG"
@@ -218,16 +221,20 @@ EOF
   release_and_tag
   #upload_to_bintray ## deprecated
 
-#        testvar=$(cat $RELEASE_NOTES)
+#for i in $(git log --oneline v12.1.0..Head --grep='(#'); do
+#   echo "commit '$i'"
+#done
+
+
+#git log --oneline v12.1.0..Head --grep='(#'
+
+#IFS='' export LOG=$(git log --oneline v12.1.0..Head --grep='(#')
+#echo $LOG
+
+#testvar=$(cat $RELEASE_NOTES)
+#nw_strr="${testvar/' '/\n}"
+
+#testvar=$(sed -i ':a;N;$!ba;s/\n/,/g' "../release_notes.md")
+#testvar=$(perl -pe 's/\n/\n/g' $RELEASE_NOTES)
 #
-#            JSON_BODY="### Plugin Playkit Support\n\n"
-#                        JSON_BODY="$JSON_BODY$NEW_TAG\n\n"
-#            JSON_BODY="$JSON_BODY * upgrade to $NEW_TAG\n\n"
-#            JSON_BODY="$JSON_BODY \n\n"
-#            JSON_BODY="$JSON_BODY #### Gradle\n\n"
-#                        JSON_BODY="$JSON_BODY * implementation 'com.kaltura.playkit:"
-#            JSON_BODY="$JSON_BODY$MODULE_NAME:$NEW_VERSION"
-#            JSON_BODY="$JSON_BODY'"
-#
-#
-#          echo "$JSON_BODY"
+#printf $testvar

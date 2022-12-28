@@ -71,10 +71,13 @@ release_and_tag() {
 
     if [[ "$RELEASE_TYPE" = "Patch" || "$RELEASE_TYPE" = "Full" ]]; then
 
+      testvar=$(cat $RELEASE_NOTES)
+      echo "$testvar"
+
 cat << EOF > ./post.json
 {
       "name": "$NEW_TAG",
-      "body": "## Changes from [$PREV_TAG](https://github.com/GouravSna/$REPO_NAME/releases/tag/$PREV_TAG)\n\nTBD",
+      "body": "## Changes from [$PREV_TAG](https://github.com/GouravSna/$REPO_NAME/releases/tag/$PREV_TAG)\n\n$testvar",
       "tag_name": "$NEW_TAG",
       "target_commitish": "$BRANCH_NAME"
 }
@@ -185,7 +188,7 @@ EOF
   PREV_TAG=v$PLAYKIT_PREV_VERSION
   RELEASE_URL=$REPO_URL/releases/tag/$NEW_TAG
 
-  RELEASE_NOTES="release_notes.md"
+  RELEASE_NOTES="../release_notes.md"
 
   if [[ "$RELEASE_TYPE" = "Full" || "$RELEASE_TYPE" = "Update" ]]; then
   BRANCH_NAME="release/$NEW_TAG"

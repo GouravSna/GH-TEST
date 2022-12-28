@@ -71,7 +71,8 @@ release_and_tag() {
 
     if [[ "$RELEASE_TYPE" = "Patch" || "$RELEASE_TYPE" = "Full" ]]; then
 
-    IFS='' git log --oneline $PREV_TAG..Head --grep='(#' > rn.txt
+    #IFS='' git log --oneline $PREV_TAG..Head --grep='(#' > rn.txt
+    git fetch --all
     testvar=$(IFS='' git log --oneline $PREV_TAG..Head --grep='(#' | cut -d' ' -f2-)
 
 cat << EOF > ./post.json

@@ -68,6 +68,8 @@ release_and_tag() {
     git commit -m "Update version to $NEW_TAG"
     set -e
     git push origin HEAD:$BRANCH_NAME || fail "Unable to push $BRANCH_NAME"
+    
+    git log
 
     if [[ "$RELEASE_TYPE" = "Patch" || "$RELEASE_TYPE" = "Full" ]]; then
 

@@ -32,16 +32,12 @@ jobs:
         with:
           fetch-depth: '0'
       
-      - name: logging
-        run: |
-          git log
+      - name: Setup JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+          cache: 'gradle'
 
-#       - name: Setup JDK 11
-#         uses: actions/setup-java@v3
-#         with:
-#           java-version: '11'
-#           distribution: 'adopt'
-#           cache: 'gradle'
-
-#       - name: Android native build
-#         run: ./gradlew build
+      - name: Android native build
+        run: ./gradlew build

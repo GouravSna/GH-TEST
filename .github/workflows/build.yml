@@ -38,11 +38,15 @@ jobs:
       
       - name: print log-1
         run: |
-          git log v1.12.0..v25.1.0 --oneline
+           git log 'v12.1.0'..'v25.1.0' --oneline 
           
       - name: print log-2
         run: |
-          git log --oneline v1.12.0..Head --grep='(#'
+          git log 'v12.1.0'..HEAD --oneline --grep='(#'
+          
+      - name: print log-3
+        run: |
+          git log 'v12.1.0'..HEAD --oneline --grep='(#' | cut -d' ' -f2-
       
       - name: Setup JDK 11
         uses: actions/setup-java@v3

@@ -69,7 +69,7 @@ release_and_tag() {
     set -e
     git push origin HEAD:$BRANCH_NAME || fail "Unable to push $BRANCH_NAME"
 
-    bash release_notes.sh
+    bash $RELEASE_NOTES_SCRIPT
 
     if [[ "$RELEASE_TYPE" = "Patch" || "$RELEASE_TYPE" = "Full" ]]; then
 
@@ -192,6 +192,7 @@ EOF
   RELEASE_URL=$REPO_URL/releases/tag/$NEW_TAG
 
   export RELEASE_NOTES="release_notes.md"
+  RELEASE_NOTES_SCRIPT=".github/release_notes.sh"
 
   if [[ "$RELEASE_TYPE" = "Full" || "$RELEASE_TYPE" = "Update" ]]; then
   BRANCH_NAME="release/$NEW_TAG"

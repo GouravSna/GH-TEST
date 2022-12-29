@@ -17,15 +17,13 @@ git log $PREV_TAG..HEAD --oneline --grep='(#' | cut -d' ' -f2- | while read -r l
       *"fix"*)
         grep -qF -- $bugFixes $RELEASE_NOTES || echo "### "$bugFixes$nl >> $RELEASE_NOTES
         modifiedLine=$(echo "$line" | sed 's/fix://')
-sed -i '' '/'"$bugFixes"'/a\
-'"- $modifiedLine$nl"'' $RELEASE_NOTES
+sed -i /'"$bugFixes"'/a '"- $modifiedLine$nl"' $RELEASE_NOTES
         ;;
 
       *"feat"*)
         grep -qF -- $newFeatures $RELEASE_NOTES || echo "### "$newFeatures$nl >> $RELEASE_NOTES
         modifiedLine=$(echo "$line" | sed 's/feat://')
-sed -i '' '/'"$newFeatures"'/a\
-'"- $modifiedLine$nl"'' $RELEASE_NOTES
+sed -i /'"$newFeatures"'/a '"- $modifiedLine$nl"' $RELEASE_NOTES
         ;;
 
       *)

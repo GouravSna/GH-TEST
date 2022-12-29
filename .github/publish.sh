@@ -68,19 +68,17 @@ release_and_tag() {
     git commit -m "Update version to $NEW_TAG"
     set -e
     git push origin HEAD:$BRANCH_NAME || fail "Unable to push $BRANCH_NAME"
-    
-    git log
+
+    bash release_notes.sh
 
     if [[ "$RELEASE_TYPE" = "Patch" || "$RELEASE_TYPE" = "Full" ]]; then
 
-    #IFS='' git log $PREV_TAG..HEAD --oneline --grep='(#' > rn.txt
-    #git fetch --all
-    testvar=$(IFS='' git log $PREV_TAG..HEAD --oneline --grep='(#' | cut -d' ' -f2-)
+    releaseNotes=$(awk -v d="\\\n" '{s=(NR==1?s:s d)$0}END{print s}' $RELEASE_NOTES)
 
 cat << EOF > ./post.json
 {
       "name": "$NEW_TAG",
-      "body": "## Changes from [$PREV_TAG](https://github.com/GouravSna/$REPO_NAME/releases/tag/$PREV_TAG)\n\n$testvar",
+      "body": "$releaseNotes",
       "tag_name": "$NEW_TAG",
       "target_commitish": "$BRANCH_NAME"
 }
@@ -116,6 +114,8 @@ EOF
          -d@post.json
 
     rm ./post.json
+
+    rm $RELEASE_NOTES
 
     # delete temp branch
     #git push origin --delete $BRANCH_NAME
@@ -187,11 +187,11 @@ EOF
   TOKEN=$TOKEN
   TEAMS_WEBHOOK=$TEAMS_WEBHOOK
 
-  NEW_TAG=v$NEW_VERSION
-  PREV_TAG=v$PLAYKIT_PREV_VERSION
+  export NEW_TAG=v$NEW_VERSION
+  export PREV_TAG=v$PLAYKIT_PREV_VERSION
   RELEASE_URL=$REPO_URL/releases/tag/$NEW_TAG
 
-  RELEASE_NOTES="release_notes.md"
+  export RELEASE_NOTES="release_notes.md"
 
   if [[ "$RELEASE_TYPE" = "Full" || "$RELEASE_TYPE" = "Update" ]]; then
   BRANCH_NAME="release/$NEW_TAG"
@@ -241,4 +241,7 @@ EOF
 #testvar=$(perl -pe 's/\n/\n/g' $RELEASE_NOTES)
 #
 #printf $testvar
+#
+#export PREV_TAG="v12.1.0"
+#bash release_notes.sh
 

@@ -1,3 +1,18 @@
+#!/bin/bash
+# This script generates "release_notes.md".
+# It grabs the logs from the previous defined tag till the HEAD
+# and do grep of the PULL requests by filtering using '(#'
+# While generating a release notes file, it has 3 sections
+# 'New Features', 'Bug Fixes' and 'More Changes'
+
+# STRICT RULES FOR PULL REQUEST SUBJECT LINE:
+## 1. 'New Feature' PR should start with 'feat(FEC-***)'. Add '|' Pipe symbol should be added before subject line starts.
+##    Example: feat(FEC-1234) | PR Subject line
+## 2. 'Bug Fixes' PR should start with 'fix(FEC-***)'. Add '|' Pipe symbol should be added before subject line starts.
+##    Example: fix(FEC-1234) | PR Subject line
+## 3. 'Other Changes' PR which is apart from the above can start like
+##    Example: FEC-1234 | PR Subject line
+
 #echo $PREV_TAG
 #echo $NEW_VERSION
 #echo $RELEASE_NOTES

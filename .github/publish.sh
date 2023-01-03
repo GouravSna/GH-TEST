@@ -1,3 +1,13 @@
+#!/bin/bash
+# This script takes care of the following tasks,
+## 1. Create a new branch from the default 'develop' or 'dev' branch.
+## 2. Change the version in version.gradle file.
+## 3. Commit and push the version.gradle changes to remote.
+## 4. Call `release_notes.sh` to generate release notes.
+## 5. Publish and Close it for SONATYPE Maven publishing.
+## 6. Create a TAG with release notes and push to remote.
+## 7. Notify MS-Teams when the whole process it done.
+
 fail() {
     echo "$@" 1>&2
     exit 1
@@ -175,7 +185,7 @@ EOF
   GH_USER_NAME="Github Actions Bot KLTR"
   RELEASE_TYPE=$RELEASE_TYPE
 
-  REPO_NAME=$REPO_NAME
+  export REPO_NAME=$REPO_NAME
   MODULE_NAME=$MODULE_NAME
   VERSION_FILE=$MODULE_NAME/version.gradle
   BUILD_GRADLE=$MODULE_NAME/build.gradle

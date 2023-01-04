@@ -84,7 +84,7 @@ release_and_tag() {
     set -e
     git push origin HEAD:$BRANCH_NAME || fail "Unable to push $BRANCH_NAME"
 
-    $RELEASE_NOTES_SCRIPT
+    bash $RELEASE_NOTES_SCRIPT
 
     if [[ "$RELEASE_TYPE" = "Patch" || "$RELEASE_TYPE" = "Full" ]]; then
 

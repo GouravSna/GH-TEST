@@ -7,6 +7,11 @@
 ## 5. Publish and Close it for SONATYPE Maven publishing.
 ## 6. Create a TAG with release notes and push to remote.
 ## 7. Notify MS-Teams when the whole process it done.
+## IMP: For Patch, there should always be a branch pushed to the remote
+## named as `patch/v*.*.*`. Because for patch, script is checking out that branch
+## and tagging it.
+
+# TODO: check if playkit is there on maven using curl https://repo1.maven.org/maven2/com/kaltura/playkit/playkit/4.24.12 like this
 
 fail() {
     echo "$@" 1>&2
@@ -15,7 +20,7 @@ fail() {
 
 checkout() {
     echo Checking out newtag = "$NEW_TAG", release type = "$RELEASE_TYPE"
-    git fetch --all
+#    git fetch --all
 
     case $RELEASE_TYPE in
       Full)
@@ -79,7 +84,7 @@ release_and_tag() {
     set -e
     git push origin HEAD:$BRANCH_NAME || fail "Unable to push $BRANCH_NAME"
 
-    bash $RELEASE_NOTES_SCRIPT
+    $RELEASE_NOTES_SCRIPT
 
     if [[ "$RELEASE_TYPE" = "Patch" || "$RELEASE_TYPE" = "Full" ]]; then
 
